@@ -52,95 +52,6 @@ sendMessageToContent = () => {
     }
 }
 
-// function closePage() {
-//     chrome.tabs.remove(pageParseId, function (tab) {
-//         sendInfoToPopUp("Страница " + openUrl + " закрыта");
-//         openUrl = false;
-//     });
-// }
-
-// function parsePageForPagesList(pageId) {
-//     typePageNow = 'pageForPagesList';
-//     chrome.tabs.sendMessage(pageId, {
-//         "event": "get_pages_list",
-//         "params": params
-//     });
-// }
-
-// function startParseObjectsFromPages() {
-//     for (var i in parsePagesList) {
-//         if (parsePagesList[i] === false) {
-//             console.log(i);
-//             openNewPage(i);
-//             break;
-//             //parsePageForObjectsList(pageParseId);
-//             //closePage(pageParseId);
-//         }
-//     }
-// }
-
-// function parsePageForObjectsList(pageId) {
-//     chrome.tabs.sendMessage(pageId, {
-//         "event": "get_objects_list",
-//         "params": params
-//     });
-// }
-
-// function fromContentOpenPage(data){
-//     sendInfoToPopUp("Открыта страница " + data.url);
-
-//     if (typePageNow === 'pageForPagesList') {
-//         parsePageForPagesList(pageParseId);
-//     } else if (typePageNow === 'objectsListFromPagesList') {
-
-//     }
-// }
-
-// function fromContentPagesList(data, sender){
-//     var pages_list = data.list;
-//     var URLNumbers = 0;
-
-//     for (var i in pages_list) {
-//         if (parsePagesList[pages_list[i]] == undefined) {
-//             parsePagesList[pages_list[i]] = false;
-//             var url = pages_list[i];
-
-//             if (url.length > 40) {
-//                 url = url.substr(0, 40) + '...';
-//                 URLNumbers++;
-//             }
-//             // sendInfoToPopUp("Добавлена страница для парсинга: <a href='" + pages_list[i] + "' target='_blank'>" + url + "</a>");
-//         }
-//     }
-
-//     sendInfoToPopUp("Найдено страниц с объектами: " + URLNumbers);
-
-//     typePageNow = 'objectsListFromPagesList';
-
-//     // startParseObjectsFromPages();
-
-// }
-
-// function fromContentObjectsList(data, sender){
-//     var pages_list = data.list;
-//     var URLNumbers = 0;
-
-//     for (var i in pages_list) {
-//         if (parseObjectsList[pages_list[i]] == undefined) {
-//             parseObjectsList[pages_list[i]] = false;
-//             var url = pages_list[i];
-
-//             if (url.length > 40) {
-//                 url = url.substr(0, 40) + '...';
-//                 URLNumbers++;
-//             }
-//             // sendInfoToPopUp("Добавлена страница для парсинга: <a href='" + pages_list[i] + "' target='_blank'>" + url + "</a>");
-//         }
-//     }
-
-//     sendInfoToPopUp("Найдено объектов на странице: " + URLNumbers);
-// }
-
 setParams = (data, sender) => {
     popUpId = sender.id;
     params.main_page = data.main_page;
@@ -180,33 +91,47 @@ chrome.runtime.onMessage.addListener(
         } else if (type === "from_content") {
             objectsForExport.push(data)
 
-            if(objects.length > 0)
-                sendMessageToContent()
-            else
-                saveAsFile(objectsForExport,'objects-all')
+            // if(objects.length > 0)
+            //     // sendMessageToContent()
+            // else
+            //     saveAsFile(objectsForExport,'objects-all')
 
 
-            if(objectsForExport.length == 500){
-                new Notification("Успешно загружено - 500")
-                saveAsFile(objectsForExport,'objects-500')
-            }
-            if(objectsForExport.length == 50){
-                new Notification("Успешно загружено - 50")
-                saveAsFile(objectsForExport,'objects-50')
-            }
-            if(objectsForExport.length == 100){
-                new Notification("Успешно загружено - 100")
-                saveAsFile(objectsForExport,'objects-100')
-            }
-            if(objectsForExport.length == 200){
-                new Notification("Успешно загружено - 200")
-                saveAsFile(objectsForExport,'objects-200')
-            }
-            if(objectsForExport.length == 10){
-                new Notification("Успешно загружено - 10")
-                saveAsFile(objectsForExport,'objects-10')
-            }
+            // if(objectsForExport.length == 500){
+            //     new Notification("Успешно загружено - 500")
+            //     saveAsFile(objectsForExport,'objects-500')
+            // }
+            // if(objectsForExport.length == 50){
+            //     new Notification("Успешно загружено - 50")
+            //     saveAsFile(objectsForExport,'objects-50')
+            // }
+            // if(objectsForExport.length == 100){
+            //     new Notification("Успешно загружено - 100")
+            //     saveAsFile(objectsForExport,'objects-100')
+            // }
+            // if(objectsForExport.length == 200){
+            //     new Notification("Успешно загружено - 200")
+            //     saveAsFile(objectsForExport,'objects-200')
+            // }
+            // if(objectsForExport.length == 10){
+            //     new Notification("Успешно загружено - 10")
+            //     saveAsFile(objectsForExport,'objects-10')
+            // }
 
+
+            $.ajax({
+              url: "http://x-case.ru/api/json/import/",
+              type: "POST",
+              data: data,
+              context: document.body
+            }).done(function(data) {
+                if(data!='') {
+                    if(objects.length > 0)
+                        sendMessageToContent()
+                    else
+                        saveAsFile(objectsForExport,'objects-all')
+                }
+            })
 
             // alert(data)
             // fromContentPage({'key':'value'})

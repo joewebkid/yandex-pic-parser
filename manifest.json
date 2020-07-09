@@ -11,7 +11,7 @@
     }
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["jquery-3.5.1.min.js", "background.js"]
   },
   "browser_action": {
     "default_title": "Заполнение базы картинками",
@@ -26,6 +26,7 @@
     "tabs",
     "activeTab",
     "notifications",
+    "http://x-case.ru/*",
     "*://*/*"
   ]
 }

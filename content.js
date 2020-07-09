@@ -30,6 +30,8 @@ $(window).on('load', () => {
                 params['parsed'] = 1
 
                 // console.log(params)
+                // sendToBackground(params)
+
                 sendToBackground(params)
             }
         }
