@@ -120,7 +120,7 @@ chrome.runtime.onMessage.addListener(
 
 
             $.ajax({
-              url: "http://x-case.ru/api/json/import/",
+              url: "https://x-case.ru/api/json/import/",
               type: "POST",
               data: data,
               context: document.body
